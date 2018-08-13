@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "tfexample" {
   location = "West Europe"
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -19,7 +19,7 @@ resource "azurerm_virtual_network" "tfexample" {
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -33,37 +33,37 @@ resource "azurerm_subnet" "tfexample" {
 
 # Create public IPs
 resource "azurerm_public_ip" "tfexample" {
-    name                         = "myTerraformPublicIP"
-    location                     = "${azurerm_resource_group.tfexample.location}"
-    resource_group_name          = "${azurerm_resource_group.tfexample.name}"
-    public_ip_address_allocation = "dynamic"
+  name                         = "myTerraformPublicIP"
+  location                     = "${azurerm_resource_group.tfexample.location}"
+  resource_group_name          = "${azurerm_resource_group.tfexample.name}"
+  public_ip_address_allocation = "dynamic"
 
-    tags {
-        environment = "Terraform Example"
-    }
+  tags {
+    environment = "TerraformExamples"
+  }
 }
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "tfexample" {
-    name                = "myTerraformNetworkSecurityGroup"
-    location            = "${azurerm_resource_group.tfexample.location}"
-    resource_group_name = "${azurerm_resource_group.tfexample.name}"
+  name                = "myTerraformNetworkSecurityGroup"
+  location            = "${azurerm_resource_group.tfexample.location}"
+  resource_group_name = "${azurerm_resource_group.tfexample.name}"
 
-    security_rule {
-        name                       = "HTTP"
-        priority                   = 1001
-        direction                  = "Inbound"
-        access                     = "Allow"
-        protocol                   = "Tcp"
-        source_port_range          = "*"
-        destination_port_range     = "${var.server_port}"
-        source_address_prefix      = "*"
-        destination_address_prefix = "*"
-    }
+  security_rule {
+    name                       = "HTTP"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "${var.server_port}"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 
-    tags {
-        environment = "Terraform Example"
-    }
+  tags {
+    environment = "TerraformExamples"
+  }
 }
 
 # Create Network Interface
@@ -81,7 +81,7 @@ resource "azurerm_network_interface" "tfexample" {
   }
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -118,7 +118,7 @@ resource "azurerm_virtual_machine" "tfexample" {
   }
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -134,11 +134,11 @@ resource "azurerm_virtual_machine_extension" "tfexample" {
 
   settings = <<SETTINGS
     {
-        "commandToExecute": "echo 'Hello, World' > index.html ; nohup busybox httpd -f -p ${var.server_port} &"
+      "commandToExecute": "echo 'Hello, World' > index.html ; nohup busybox httpd -f -p ${var.server_port} &"
     }
 SETTINGS
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }

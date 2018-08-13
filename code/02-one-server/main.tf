@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "tfexample" {
   location = "West Europe"
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -19,7 +19,7 @@ resource "azurerm_virtual_network" "tfexample" {
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -44,7 +44,7 @@ resource "azurerm_network_interface" "tfexample" {
   }
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
 
@@ -81,6 +81,6 @@ resource "azurerm_virtual_machine" "tfexample" {
   }
 
   tags {
-    environment = "Terraform Example"
+    environment = "TerraformExamples"
   }
 }
