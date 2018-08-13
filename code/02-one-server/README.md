@@ -114,7 +114,7 @@ This Terraform file deploys a single server on Microsoft Azure.
 
 * Test the deploy:
 
-  When the `terraform apply` command completes, use the Azure console, you should see the new Virtual Machine, and all the resources created with the `Terraform Example` tag.
+  When the `terraform apply` command completes, use the Azure console, you should see the new Virtual Machine, and all the resources created with the `environment: "TerraformExamples"` tag.
 
 * Clean up the resources created when you have finished:
 
