@@ -5,10 +5,6 @@ provider "azurerm" {
 resource "azurerm_resource_group" "tfexample" {
   name     = "myTerraformResourceGroup"
   location = "West Europe"
-
-  tags {
-    environment = "TerraformExamples"
-  }
 }
 
 # Create Virtual Network
@@ -17,10 +13,6 @@ resource "azurerm_virtual_network" "tfexample" {
   address_space       = ["10.0.0.0/16"]
   location            = "${azurerm_resource_group.tfexample.location}"
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
-
-  tags {
-    environment = "TerraformExamples"
-  }
 }
 
 # Create Subnet in the Virtual Network
@@ -41,10 +33,6 @@ resource "azurerm_network_interface" "tfexample" {
     name                          = "myTerraformNicConfiguration"
     subnet_id                     = "${azurerm_subnet.tfexample.id}"
     private_ip_address_allocation = "dynamic"
-  }
-
-  tags {
-    environment = "TerraformExamples"
   }
 }
 
