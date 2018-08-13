@@ -114,7 +114,9 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
 
 * Test the web server:
 
-   You can test it in two ways:
+  When the `terraform apply` command completes, it will output the public IP address of the web server.
+
+  You can test it in two ways:
   
   * Running this command:
 
