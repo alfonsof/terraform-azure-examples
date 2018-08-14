@@ -1,3 +1,4 @@
+# Use Azure Resource Manager (AzureRM) provider
 provider "azurerm" {
 }
  
@@ -13,6 +14,10 @@ resource "azurerm_virtual_network" "tfexample" {
   address_space       = ["10.0.0.0/16"]
   location            = "${azurerm_resource_group.tfexample.location}"
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
+
+  tags {
+    environment = "TerraformExamples"
+  }
 }
 
 # Create Subnet in the Virtual Network
@@ -29,6 +34,10 @@ resource "azurerm_public_ip" "tfexample" {
   location                     = "${azurerm_resource_group.tfexample.location}"
   resource_group_name          = "${azurerm_resource_group.tfexample.name}"
   public_ip_address_allocation = "dynamic"
+
+  tags {
+    environment = "TerraformExamples"
+  }
 }
 
 # Create Network Security Group and rule
