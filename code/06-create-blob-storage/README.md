@@ -2,7 +2,7 @@
 
 This folder contains the create Blob Storage example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys the creation of a container on Microsoft Azure using Blob Storage.
+This Terraform file deploys the creation of a Blob Storage container on Microsoft Azure.
 
 ## Requirements
 

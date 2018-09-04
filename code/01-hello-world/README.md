@@ -2,7 +2,7 @@
 
 This folder contains a "Hello, World" example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys a single server on Microsoft Azure.
+This Terraform file deploys a single server on Microsoft Azure using the shortest script.
 
 ## Requirements
 
