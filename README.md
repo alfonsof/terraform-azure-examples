@@ -12,6 +12,8 @@ Terraform also supports other Cloud providers and this Github repository contain
 
 ## Quick start
 
+You must have a [Microsoft Azure](https://azure.microsoft.com/) subscription.
+
 The code consists of Terraform examples using HashiCorp Configuration Language (HCL) on Microsoft Azure.
 
 All the code is in the [code](/code) folder.
