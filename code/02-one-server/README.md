@@ -2,7 +2,7 @@
 
 This folder contains a one server example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys a single server on Microsoft Azure.
+This Terraform file deploys a single server on Microsoft Azure using Azure Virtual Machines.
 
 ## Requirements
 
@@ -94,29 +94,37 @@ This Terraform file deploys a single server on Microsoft Azure.
       ARM_TENANT_ID = <YOUR_tenant>
       ```
 
-* The first command that should be run after writing a new Terraform configuration is the terraform `init command` in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
+* Initialize working directory.
+
+  The first command that should be run after writing a new Terraform configuration is the `terraform init` command in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
 
   ```bash
   terraform init
   ```
 
-* Validate the changes:
+* Validate the changes.
+
+  Run command:
 
   ```bash
   terraform plan
   ```
 
-* Deploy the changes:
+* Deploy the changes.
+
+  Run command:
 
   ```bash
   terraform apply
   ```
 
-* Test the deploy:
+* Test the deploy.
 
   When the `terraform apply` command completes, use the Azure console, you should see the new Virtual Machine, and all the resources created with the `environment: "TerraformExamples"` tag.
 
-* Clean up the resources created when you have finished:
+* Clean up the resources created.
+
+  When you have finished, run command:
 
   ```bash
   terraform destroy

@@ -114,25 +114,76 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
 
   The terraform file creates your storage account.
 
-* The first command that should be run after writing a new Terraform configuration is the terraform `init command` in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
+* Initialize working directory.
+
+  The first command that should be run after writing a new Terraform configuration is the `terraform init` command in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
 
   ```bash
   terraform init
   ```
 
-* Validate the changes:
+* Modify configuration.
+
+  You have to modify:
+
+  * Storage Account name, which is defined as an input variable `storage_account_name`.
+  * Storage container name , which is defined as an input variable `container_name`.
+
+   both in `vars.tf` file.
+
+  If you want to modify these you will be able to do it in several ways:
+
+  * Loading variables from command line flags.
+
+    Run Terraform commands in this way:
+
+    ```bash
+    terraform plan -var 'storage_account_name=tfstorageaccountmyaccount' -var 'container_name=terraform-state-my-container'
+    ```
+
+    ```bash
+    terraform apply -var 'storage_account_name=tfstorageaccountmyaccount' -var 'container_name=terraform-state-my-container'
+    ```
+
+  * Loading variables from a file.
+
+    When Terraform runs it will look for a file called `terraform.tfvars`. You can populate this file with variable values that will be loaded when Terraform runs. An example for the content of the `terraform.tfvars` file:
+
+    ```bash
+    storage_account_name = "tfstorageaccountmyaccount"
+    container_name = "terraform-state-my-container"
+    ```
+
+  * Loading variables from environment variables.
+
+    Terraform will also parse any environment variables that are prefixed with `TF_VAR`. You can create environment variables `TF_VAR_storage_account_name` and `TF_VAR_container_name`:
+
+    ```bash
+    TF_VAR_storage_account_name=tfstorageaccountmyaccount
+    TF_VAR_container_name=terraform-state-my-container
+    ```
+
+  * Variable defaults.
+
+    Change the value of the `default` attribute of `storage_account_name` and `container_name` input variables in `vars.tf` file.
+
+* Validate the changes.
+
+  Run command:
 
   ```bash
   terraform plan
   ```
 
-* Deploy the changes:
+* Deploy the changes.
+
+  Run command:
 
   ```bash
   terraform apply
   ```
 
-* Test the deploy:
+* Test the deploy.
 
   When the `terraform apply` command completes, use the Azure console, you should see:
   
@@ -140,7 +191,9 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
 
   * The new Blob Storage container created in the Azure storage account.
 
-* Clean up the resources created when you have finished:
+* Clean up the resources created.
+
+  When you have finished, run command:
 
   ```bash
   terraform destroy

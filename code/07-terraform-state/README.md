@@ -96,31 +96,48 @@ This information is stored in the Terraform state file `terraform.tfstate`. This
       ARM_TENANT_ID = <YOUR_tenant>
       ```
 
-* The first command that should be run after writing a new Terraform configuration is the terraform `init command` in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
+* Initialize working directory.
+
+  The first command that should be run after writing a new Terraform configuration is the `terraform init` command in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
 
   ```bash
   terraform init
   ```
 
-* Validate the changes:
+* Modify configuration.
+
+  You have to modify:
+
+  * Storage Account name, which is defined in the `storage_account_name` attribute.
+  * Container Name, which is defined in the `container_name` attribute.
+
+  both in `backend.tf` file.
+
+* Validate the changes.
+
+  Run command:
 
   ```bash
   terraform plan
   ```
 
-* Deploy the changes:
+* Deploy the changes.
+
+  Run command:
 
   ```bash
   terraform apply
   ```
 
-* Test the deploy:
+* Test the deploy.
 
   When the `terraform apply` command completes, use the Azure console, you should see the `terraform.tfstate` file created in the Blob Storage container in the storage account.
 
   The `terraform.tfstate` file is where is stored the terraform state.
 
-* Clean up the resources created when you have finished:
+* Clean up the resources created.
+
+  When you have finished, run command:
 
   ```bash
   terraform destroy
