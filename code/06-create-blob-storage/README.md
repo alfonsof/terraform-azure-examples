@@ -101,15 +101,15 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
   An storage account can content containers and every container can content blobs.
 
   ```bash
-  Storage Account -|- Container_1 -|- Blob_1
-                   |               |
-                   |               |- Blob_2
-                   |
-                   |- Container_2 -|- Blob_1
-                                   |
-                                   |- Blob_2
-                                   |
-                                   |- Blob_3
+  Storage Account
+              ├── Container_1/
+              │   ├── Blob_1_1/
+              │   └── Blob_1_2/
+              │
+              └── Container_2/
+                  ├── Blob_2_1/
+                  ├── Blob_2_2/
+                  └── Blob_2_3/
   ```
 
   The terraform file creates your storage account.
