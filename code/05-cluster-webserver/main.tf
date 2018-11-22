@@ -1,14 +1,14 @@
-# Use Azure Resource Manager (AzureRM) provider
+# Configure Azure Resource Manager (AzureRM) provider
 provider "azurerm" {
 }
  
-# Create Resource Group if it doesn’t exist
+# Create a Resource Group if it doesn’t exist
 resource "azurerm_resource_group" "tfexample" {
   name     = "myTerraformResourceGroup"
   location = "West Europe"
 }
 
-# Create Virtual Network
+# Create a Virtual Network
 resource "azurerm_virtual_network" "tfexample" {
   name                = "myTerraformVnet"
   address_space       = ["10.0.0.0/16"]
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "tfexample" {
   }
 }
 
-# Create Subnet in the Virtual Network
+# Create a Subnet in the Virtual Network
 resource "azurerm_subnet" "tfexample" {
   name                 = "myTerraformSubnet"
   resource_group_name  = "${azurerm_resource_group.tfexample.name}"
@@ -28,7 +28,7 @@ resource "azurerm_subnet" "tfexample" {
   address_prefix       = "10.0.2.0/24"
 }
 
-# Create public IP
+# Create a Public IP
 resource "azurerm_public_ip" "tfexample" {
   name                         = "myTerraformPublicIP"
   location                     = "${azurerm_resource_group.tfexample.location}"
@@ -40,7 +40,7 @@ resource "azurerm_public_ip" "tfexample" {
   }
 }
 
-# Create Load Balancer
+# Create a Load Balancer
 resource "azurerm_lb" "tfexample" {
   name                = "MyTerraformLoadBalancer"
   location            = "${azurerm_resource_group.tfexample.location}"
@@ -56,14 +56,14 @@ resource "azurerm_lb" "tfexample" {
   }
 }
 
-# Create Load Balancer Backend Address Pool
+# Create a Load Balancer Backend Address Pool
 resource "azurerm_lb_backend_address_pool" "tfexample" {
   name                = "BackEndAddressPool"
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
   loadbalancer_id     = "${azurerm_lb.tfexample.id}"
 }
 
-# Creste Load Balancer health probes
+# Creste a Load Balancer health probes
 resource "azurerm_lb_probe" "tfexample" {
   name                = "httpProbe"
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
@@ -84,7 +84,7 @@ resource "azurerm_lb_rule" "tfexample" {
   probe_id                       = "${azurerm_lb_probe.tfexample.id}"
 }
 
-# Create Virtual Machine Scale Set
+# Create a Virtual Machine Scale Set
 resource "azurerm_virtual_machine_scale_set" "tfexample" {
   name                  = "myTerraformScaleSet"
   location              = "${azurerm_resource_group.tfexample.location}"

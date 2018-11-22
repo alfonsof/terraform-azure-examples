@@ -1,14 +1,14 @@
-# Use Azure Resource Manager (AzureRM) provider
+# Configure Azure Resource Manager (AzureRM) provider
 provider "azurerm" {
 }
  
-# Create Resource Group if it doesn’t exist
+# Create a Resource Group if it doesn’t exist
 resource "azurerm_resource_group" "tfexample" {
   name     = "myTerraformResourceGroup"
   location = "West Europe"
 }
 
-# Create storage account
+# Create a Storage account
 resource "azurerm_storage_account" "terraform_state" {
   name                     = "${var.storage_account_name}"
   resource_group_name      = "${azurerm_resource_group.tfexample.name}"
@@ -21,7 +21,7 @@ resource "azurerm_storage_account" "terraform_state" {
   }
 }
 
-# Create storage container
+# Create a Storage container
 resource "azurerm_storage_container" "terraform_state" {
   name                  = "${var.container_name}"
   resource_group_name   = "${azurerm_resource_group.tfexample.name}"

@@ -1,3 +1,3 @@
-# Use Azure Resource Manager (AzureRM) provider
+# Configure Azure Resource Manager (AzureRM) provider
 provider "azurerm" {
 }

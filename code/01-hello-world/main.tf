@@ -1,14 +1,14 @@
-# Use Azure Resource Manager (AzureRM) provider
+# Configure Azure Resource Manager (AzureRM) provider
 provider "azurerm" {
 }
  
-# Create Resource Group if it doesn’t exist
+# Create a Resource Group if it doesn’t exist
 resource "azurerm_resource_group" "tfexample" {
   name     = "myTerraformResourceGroup"
   location = "West Europe"
 }
 
-# Create Virtual Network
+# Create a Virtual Network
 resource "azurerm_virtual_network" "tfexample" {
   name                = "myTerraformVnet"
   address_space       = ["10.0.0.0/16"]
@@ -16,7 +16,7 @@ resource "azurerm_virtual_network" "tfexample" {
   resource_group_name = "${azurerm_resource_group.tfexample.name}"
 }
 
-# Create Subnet in the Virtual Network
+# Create a Subnet in the Virtual Network
 resource "azurerm_subnet" "tfexample" {
   name                 = "myTerraformSubnet"
   resource_group_name  = "${azurerm_resource_group.tfexample.name}"
@@ -24,7 +24,7 @@ resource "azurerm_subnet" "tfexample" {
   address_prefix       = "10.0.2.0/24"
 }
 
-# Create Network Interface
+# Create a Network Interface
 resource "azurerm_network_interface" "tfexample" {
   name                = "myTerraformNic"
   location            = "${azurerm_resource_group.tfexample.location}"
@@ -37,7 +37,7 @@ resource "azurerm_network_interface" "tfexample" {
   }
 }
 
-# Create Virtual Machine
+# Create a Virtual Machine
 resource "azurerm_virtual_machine" "tfexample" {
   name                  = "myTerraformVM"
   location              = "${azurerm_resource_group.tfexample.location}"
