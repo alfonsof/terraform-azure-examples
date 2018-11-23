@@ -112,7 +112,7 @@ This information is stored in the Terraform state file `terraform.tfstate`. This
   * Container Name, which is defined in the `container_name` attribute.
 
   ```bash
-  storage_account_name = "<YOUR_ACCOUNT>"
+  storage_account_name = "<YOUR_STORAGE_ACCOUNT>"
   container_name       = "<YOUR_CONTAINER_NAME>"
   ```
 
