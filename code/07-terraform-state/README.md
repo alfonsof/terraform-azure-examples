@@ -106,12 +106,15 @@ This information is stored in the Terraform state file `terraform.tfstate`. This
 
 * Modify configuration.
 
-  You have to modify:
+  You must modify two attributes in `backend.tf` file:
 
   * Storage Account name, which is defined in the `storage_account_name` attribute.
   * Container Name, which is defined in the `container_name` attribute.
 
-  both in `backend.tf` file.
+  ```bash
+  storage_account_name = "<YOUR_ACCOUNT>"
+  container_name       = "<YOUR_CONTAINER_NAME>"
+  ```
 
 * Validate the changes.
 

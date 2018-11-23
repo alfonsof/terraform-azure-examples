@@ -124,25 +124,23 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
 
 * Modify configuration.
 
-  You have to modify:
+  You must modify two input variables in `vars.tf` file:
 
   * Storage Account name, which is defined as an input variable `storage_account_name`.
   * Storage container name , which is defined as an input variable `container_name`.
 
-   both in `vars.tf` file.
-
-  If you want to modify these you will be able to do it in several ways:
+  You can modify these in several ways:
 
   * Loading variables from command line flags.
 
     Run Terraform commands in this way:
 
     ```bash
-    terraform plan -var 'storage_account_name=tfstorageaccountmyaccount' -var 'container_name=terraform-state-my-container'
+    terraform plan -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT>' -var 'container_name=<YOUR_CONTAINER_NAME>'
     ```
 
     ```bash
-    terraform apply -var 'storage_account_name=tfstorageaccountmyaccount' -var 'container_name=terraform-state-my-container'
+    terraform apply -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT>' -var 'container_name=<YOUR_CONTAINER_NAME>'
     ```
 
   * Loading variables from a file.
@@ -150,8 +148,8 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
     When Terraform runs it will look for a file called `terraform.tfvars`. You can populate this file with variable values that will be loaded when Terraform runs. An example for the content of the `terraform.tfvars` file:
 
     ```bash
-    storage_account_name = "tfstorageaccountmyaccount"
-    container_name = "terraform-state-my-container"
+    storage_account_name = "<YOUR_STORAGE_ACCOUNT>"
+    container_name = "<YOUR_CONTAINER_NAME>"
     ```
 
   * Loading variables from environment variables.
@@ -159,13 +157,25 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
     Terraform will also parse any environment variables that are prefixed with `TF_VAR`. You can create environment variables `TF_VAR_storage_account_name` and `TF_VAR_container_name`:
 
     ```bash
-    TF_VAR_storage_account_name=tfstorageaccountmyaccount
-    TF_VAR_container_name=terraform-state-my-container
+    TF_VAR_storage_account_name=<YOUR_STORAGE_ACCOUNT>
+    TF_VAR_container_name=<YOUR_CONTAINER_NAME>
     ```
 
   * Variable defaults.
 
     Change the value of the `default` attribute of `storage_account_name` and `container_name` input variables in `vars.tf` file.
+
+    ```hcl
+    variable "storage_account_name" {
+      description = "The name of the storage account. Must be globally unique, length between 3 and 24 characters and contain numbers and lowercase letters only."
+      default = "<YOUR_STORAGE_ACCOUNT>"
+    }
+
+    variable "container_name" {
+      description = "The name of the Blob Storage container."
+      default = "<YOUR_CONTAINER_NAME>"
+    }
+    ```
 
 * Validate the changes.
 
