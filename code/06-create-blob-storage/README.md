@@ -122,7 +122,7 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
   terraform init
   ```
 
-* Modify configuration.
+* Configure Storage Account and container names.
 
   You must modify two input variables in `vars.tf` file:
 

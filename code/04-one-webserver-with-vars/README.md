@@ -102,7 +102,7 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
   terraform init
   ```
 
-* Modify configuration.
+* Modify server port configuration.
 
   The web server is listening on port 8080, which is defined as an input variable `server_port` in `vars.tf` file.
 

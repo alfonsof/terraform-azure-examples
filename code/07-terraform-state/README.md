@@ -104,7 +104,7 @@ This information is stored in the Terraform state file `terraform.tfstate`. This
   terraform init
   ```
 
-* Modify configuration.
+* Configure Terraform backend.
 
   You must modify two attributes in `backend.tf` file:
 
