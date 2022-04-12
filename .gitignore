@@ -1,3 +1,36 @@
-.terraform
+# Local .terraform directories
+.terraform/
+**/.terraform/*
+
+# Terraform .tfstate files
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
+
+# Terraform .tfvars files, which are likely to contain sensitive data
+*.tfvars
+*.tfvars.json
+
+# Terraform override files as they are usually used to override resources locally
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
+
+# logs
+*.log
+
+# Mac .DS_Store files
+.DS_Store
+
+# vscode files
+.vscode/
+
+# SSH Keys
+*.pem
+
+# Backup files
+*.bak
