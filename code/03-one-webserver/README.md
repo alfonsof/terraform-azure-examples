@@ -6,97 +6,112 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
 
 ## Requirements
 
-* You must have [Terraform](https://www.terraform.io/) installed on your computer.
 * You must have a [Microsoft Azure](https://azure.microsoft.com/) subscription.
-* It uses the Terraform Azure Provider that interacts with the many resources supported by Azure Resource Manager (AzureRM) through its APIs.
-* This code was written for Terraform 0.11.x.
+
+* You must have the following installed:
+  * [Terraform](https://www.terraform.io/) CLI
+  * Azure CLI tool
+
+* The code was written for:
+  * Terraform 0.14 or later
+
+* It uses the Terraform AzureRM Provider v 3.1 that interacts with the many resources supported by Azure Resource Manager (AzureRM) through its APIs.
 
 ## Using the code
 
 * Configure your access to Azure.
 
-  To enable Terraform to provision resources into Azure, create an Azure AD service principal. The service principal grants your Terraform scripts to provision resources in your Azure subscription.
+  * Authenticate using the Azure CLI.
 
-  You can create it using Azure CLI 2.0 or using the Azure cloud shell.
+    Terraform must authenticate to Azure to create infrastructure.
 
-  * Make sure you select your subscription by:
+    In your terminal, use the Azure CLI tool to setup your account permissions locally.
 
     ```bash
-    az account set --subscription <SUBSCRIPTION_ID>
+    az login  
     ```
 
-    and you have the privileges to create service principals.
+    Your browser will open and prompt you to enter your Azure login credentials. After successful authentication, your terminal will display your subscription information.
 
-  * There are two ways for creating a service principal:
+    You have logged in. Now let us find all the subscriptions to which you have access...
 
-    * First way:
-
-      * Execute the following command for creating a service principal:
-  
-        ```bash
-        az ad sp create-for-rbac --sdk-auth > my.azureauth
-        ```
-
-      * This command will create a file `my.azureauth` with this content:
-
-        ```bash
-        {
-            "clientId": "00000000-0000-0000-0000-000000000000",
-            "clientSecret": "00000000-0000-0000-0000-000000000000",
-            "subscriptionId": "00000000-0000-0000-0000-000000000000",
-            "tenantId": "00000000-0000-0000-0000-000000000000",
-            "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
-            "resourceManagerEndpointUrl": "https://management.azure.com/",
-            "activeDirectoryGraphResourceId": "https://graph.windows.net/",
-            "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
-            "galleryEndpointUrl": "https://gallery.azure.com/",
-            "managementEndpointUrl": "https://management.core.windows.net/"
+    ```bash
+    [
+      {
+        "cloudName": "<CLOUD-NAME>",
+        "homeTenantId": "<HOME-TENANT-ID>",
+        "id": "<SUBSCRIPTION-ID>",
+        "isDefault": true,
+        "managedByTenants": [],
+        "name": "<SUBSCRIPTION-NAME>",
+        "state": "Enabled",
+        "tenantId": "<TENANT-ID>",
+        "user": {
+          "name": "<YOUR-USERNAME@DOMAIN.COM>",
+          "type": "user"
         }
-        ```
+      }
+    ]
+    ```
 
-    * Second way:
+    Find the `id` column for the subscription account you want to use.
 
-      * Execute the following command for creating a service principal:
+    Once you have chosen the account subscription ID, set the account with the Azure CLI.
 
-        ```bash
-        az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<SUBSCRIPTION_ID>"
-        ```
+    ```bash
+    az account set --subscription "<SUBSCRIPTION-ID>"
+    ```
 
-      * This command will output 5 values:
+  * Create a Service Principal.
 
-        ```bash
-        {
-            "appId": "00000000-0000-0000-0000-000000000000",
-            "displayName": "azure-cli-2017-06-05-10-41-15",
-            "name": "http://azure-cli-2017-06-05-10-41-15",
-            "password": "00000000-0000-0000-0000-000000000000",
-            "tenant": "00000000-0000-0000-0000-000000000000"
-        }
-        ```
+    A Service Principal is an application within Azure Active Directory with the authentication tokens Terraform needs to perform actions on your behalf. Update the `<SUBSCRIPTION_ID>` with the subscription ID you specified in the previous step.
 
-  * To configure Terraform to use your Azure AD service principal, set the following environment variables, depending on the previous way for creating the service principal:
+    Create a Service Principal:
 
-    * First way:
+    ```bash
+    az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<SUBSCRIPTION_ID>"
+
+    Creating 'Contributor' role assignment under scope '/subscriptions/<SUBSCRIPTION_ID>'
+    The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
+    {
+      "appId": "xxxxxx-xxx-xxxx-xxxx-xxxxxxxxxx",
+      "displayName": "azure-cli-2022-xxxx",
+      "password": "xxxxxx~xxxxxx~xxxxx",
+      "tenant": "xxxxx-xxxx-xxxxx-xxxx-xxxxx"
+    }
+    ```
+
+  * Set your environment variables.
+
+    HashiCorp recommends setting these values as environment variables rather than saving them in your Terraform configuration.
+
+    In your terminal, set the following environment variables. Be sure to update the variable values with the values Azure returned in the previous command.
+
+    * For MacOS/Linux:
 
       ```bash
-      ARM_SUBSCRIPTION_ID = <YOUR_subscriptionId>
-      ARM_CLIENT_ID = <YOUR_clientId>
-      ARM_CLIENT_SECRET = <YOUR_clientSecret>
-      ARM_TENANT_ID = <YOUR_tenantId>
+      export ARM_CLIENT_ID="<SERVICE_PRINCIPAL_APPID>"
+      export ARM_CLIENT_SECRET="<SERVICE_PRINCIPAL_PASSWORD>"
+      export ARM_SUBSCRIPTION_ID="<SUBSCRIPTION_ID>"
+      export ARM_TENANT_ID="<TENANT_ID>"
       ```
 
-    * Second way:
+    * For Windows (PowerShell):
 
       ```bash
-      ARM_SUBSCRIPTION_ID = <SUBSCRIPTION_ID>
-      ARM_CLIENT_ID = <YOUR_appId>
-      ARM_CLIENT_SECRET = <YOUR_password>
-      ARM_TENANT_ID = <YOUR_tenant>
+      $env:ARM_CLIENT_ID="<SERVICE_PRINCIPAL_APPID>"
+      $env:ARM_CLIENT_SECRET="<SERVICE_PRINCIPAL_PASSWORD>"
+      $env:ARM_SUBSCRIPTION_ID="<SUBSCRIPTION_ID>"
+      $env:ARM_TENANT_ID="<TENANT_ID>"
       ```
 
-* Initialize working directory.
+* Initialize Terraform configuration.
 
   The first command that should be run after writing a new Terraform configuration is the `terraform init` command in order to initialize a working directory containing Terraform configuration files. It is safe to run this command multiple times.
+
+  If you ever set or change modules or backend configuration for Terraform, rerun this command to reinitialize your working directory. If you forget, other commands will detect it and remind you to do so if necessary.
+
+  Run command:
 
   ```bash
   terraform init
@@ -104,13 +119,17 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
 
 * Validate the changes.
 
+  The `terraform plan` command lets you see what Terraform will do before actually making any changes.
+
   Run command:
 
   ```bash
   terraform plan
   ```
 
-* Deploy the changes.
+* Apply the changes.
+
+  The `terraform apply` command lets you apply your configuration and it creates the infrastructure.
 
   Run command:
 
@@ -122,21 +141,23 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
 
   When the `terraform apply` command completes, it will output the public IP address of the web server.
 
-  You can test it in two ways:
+  You can test it in two ways, but be sure to replace the value of `<SERVER_PUBLIC_IP>` by the public IP address that you have got in the previous command:
   
   * Running this command:
 
     ```bash
-    curl http://<server_public_ip>:8080/
+    curl http://<SERVER_PUBLIC_IP>:8080/
     ```
 
-  * Writing in your browser this URL: `http://<server_public_ip>:8080/`
+  * Writing in your browser this URL: `http://<SERVER_PUBLIC_IP>:8080/`
 
   You should get a `Hello, World` response message.
 
 * Clean up the resources created.
 
-  When you have finished, run command:
+  When you have finished, the `terraform destroy` command destroys the infrastructure you created.
+  
+  Run command:
 
   ```bash
   terraform destroy
