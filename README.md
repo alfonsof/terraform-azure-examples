@@ -1,6 +1,8 @@
 # Terraform examples on Microsoft Azure
 
-Terraform is used to create, manage, and update infrastructure resources such as physical machines, VMs, network switches, containers, and more. Almost any infrastructure type can be represented as a resource in Terraform.
+Terraform is an open-source infrastructure as code software tool that provides a consistent CLI workflow to manage hundreds of cloud services. Terraform codifies cloud APIs into declarative configuration files.
+
+Terraform is used to create, manage, and update infrastructure resources such as VMs, storage, containers, and more. Almost any infrastructure type can be represented as a resource in Terraform.
 
 This repo contains [Terraform](https://www.terraform.io/) code examples on Microsoft Azure.
 
