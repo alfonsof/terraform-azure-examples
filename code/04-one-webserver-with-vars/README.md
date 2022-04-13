@@ -121,18 +121,18 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
 
   The web server is listening on port 8080, which is defined as an input variable `server_port` in `vars.tf` file.
 
-  If you want to modify the server port you will be able to do it in several ways:
+  If you want to modify the server port you will be able to do it in several ways, but be sure to replace the value of `<SERVER_PORT>` by your server port:
 
   * Loading variables from command line option.
 
     Run Terraform commands in this way:
 
     ```bash
-    terraform plan -var 'server_port=8080'
+    terraform plan -var 'server_port=<SERVER_PORT>'
     ```
 
     ```bash
-    terraform apply -var 'server_port=8080'
+    terraform apply -var 'server_port=<SERVER_PORT>'
     ```
 
   * Loading variables from a file.
@@ -140,7 +140,7 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
     When Terraform runs it will look for a file called `terraform.tfvars`. You can populate this file with variable values that will be loaded when Terraform runs. An example for the content of the `terraform.tfvars` file:
 
     ```bash
-    server_port = "8080"
+    server_port = "<SERVER_PORT>"
     ```
 
   * Loading variables from environment variables.
@@ -148,12 +148,19 @@ This Terraform file deploys a single web server on Microsoft Azure. The web serv
     Terraform will also parse any environment variables that are prefixed with `TF_VAR`. You can create an environment variable `TF_VAR_server_port`:
 
     ```bash
-    export TF_VAR_server_port=8080
+    export TF_VAR_server_port=<SERVER_PORT>
     ```
 
   * Variable defaults.
 
     Change the value of the `default` attribute of `server_port` input variable in `vars.tf` file.
+
+    ```hcl
+    variable "server_port" {
+      description = "The port the server will use for HTTP requests"
+      default     = "<SERVER_PORT>"
+    }
+    ```
 
 * Validate the changes.
 

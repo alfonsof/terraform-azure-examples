@@ -83,7 +83,7 @@ resource "azurerm_network_interface" "tfexample" {
   resource_group_name = azurerm_resource_group.tfexample.name
 
   ip_configuration {
-    name                          = "my-terraform-nic-ip-config"
+    name                          = "my-terraform-nic-ip"
     subnet_id                     = azurerm_subnet.tfexample.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.tfexample.id
