@@ -2,96 +2,107 @@
 
 This folder contains the create Blob Storage example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys the creation of a Blob Storage container on Microsoft Azure.
+This Terraform file create a Blob Storage container on Microsoft Azure by provisioning the necessary infrastructure.
 
 ## Requirements
 
-* You must have [Terraform](https://www.terraform.io/) installed on your computer.
 * You must have a [Microsoft Azure](https://azure.microsoft.com/) subscription.
-* It uses the Terraform Azure Provider that interacts with the many resources supported by Azure Resource Manager (AzureRM) through its APIs.
-* This code was written for Terraform 0.11.x.
+
+* You must have the following installed:
+  * [Terraform](https://www.terraform.io/) CLI
+  * Azure CLI tool
+
+* The code was written for:
+  * Terraform 0.14 or later
+
+* It uses the Terraform AzureRM Provider v 3.1 that interacts with the many resources supported by Azure Resource Manager (AzureRM) through its APIs.
 
 ## Using the code
 
 * Configure your access to Azure.
 
-  To enable Terraform to provision resources into Azure, create an Azure AD service principal. The service principal grants your Terraform scripts to provision resources in your Azure subscription.
+  * Authenticate using the Azure CLI.
 
-  You can create it using Azure CLI 2.0 or using the Azure cloud shell.
+    Terraform must authenticate to Azure to create infrastructure.
 
-  * Make sure you select your subscription by:
+    In your terminal, use the Azure CLI tool to setup your account permissions locally.
 
     ```bash
-    az account set --subscription <SUBSCRIPTION_ID>
+    az login  
     ```
 
-    and you have the privileges to create service principals.
+    Your browser will open and prompt you to enter your Azure login credentials. After successful authentication, your terminal will display your subscription information.
 
-  * There are two ways for creating a service principal:
+    You have logged in. Now let us find all the subscriptions to which you have access...
 
-    * First way:
-
-      * Execute the following command for creating a service principal:
-  
-        ```bash
-        az ad sp create-for-rbac --sdk-auth > my.azureauth
-        ```
-
-      * This command will create a file `my.azureauth` with this content:
-
-        ```bash
-        {
-            "clientId": "00000000-0000-0000-0000-000000000000",
-            "clientSecret": "00000000-0000-0000-0000-000000000000",
-            "subscriptionId": "00000000-0000-0000-0000-000000000000",
-            "tenantId": "00000000-0000-0000-0000-000000000000",
-            "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
-            "resourceManagerEndpointUrl": "https://management.azure.com/",
-            "activeDirectoryGraphResourceId": "https://graph.windows.net/",
-            "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
-            "galleryEndpointUrl": "https://gallery.azure.com/",
-            "managementEndpointUrl": "https://management.core.windows.net/"
+    ```bash
+    [
+      {
+        "cloudName": "<CLOUD-NAME>",
+        "homeTenantId": "<HOME-TENANT-ID>",
+        "id": "<SUBSCRIPTION-ID>",
+        "isDefault": true,
+        "managedByTenants": [],
+        "name": "<SUBSCRIPTION-NAME>",
+        "state": "Enabled",
+        "tenantId": "<TENANT-ID>",
+        "user": {
+          "name": "<YOUR-USERNAME@DOMAIN.COM>",
+          "type": "user"
         }
-        ```
+      }
+    ]
+    ```
 
-    * Second way:
+    Find the `id` column for the subscription account you want to use.
 
-      * Execute the following command for creating a service principal:
+    Once you have chosen the account subscription ID, set the account with the Azure CLI.
 
-        ```bash
-        az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<SUBSCRIPTION_ID>"
-        ```
+    ```bash
+    az account set --subscription "<SUBSCRIPTION-ID>"
+    ```
 
-      * This command will output 5 values:
+  * Create a Service Principal.
 
-        ```bash
-        {
-            "appId": "00000000-0000-0000-0000-000000000000",
-            "displayName": "azure-cli-2017-06-05-10-41-15",
-            "name": "http://azure-cli-2017-06-05-10-41-15",
-            "password": "00000000-0000-0000-0000-000000000000",
-            "tenant": "00000000-0000-0000-0000-000000000000"
-        }
-        ```
+    A Service Principal is an application within Azure Active Directory with the authentication tokens Terraform needs to perform actions on your behalf. Update the `<SUBSCRIPTION_ID>` with the subscription ID you specified in the previous step.
 
-  * To configure Terraform to use your Azure AD service principal, set the following environment variables, depending on the previous way for creating the service principal:
+    Create a Service Principal:
 
-    * First way:
+    ```bash
+    az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<SUBSCRIPTION_ID>"
+
+    Creating 'Contributor' role assignment under scope '/subscriptions/<SUBSCRIPTION_ID>'
+    The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli
+    {
+      "appId": "xxxxxx-xxx-xxxx-xxxx-xxxxxxxxxx",
+      "displayName": "azure-cli-2022-xxxx",
+      "password": "xxxxxx~xxxxxx~xxxxx",
+      "tenant": "xxxxx-xxxx-xxxxx-xxxx-xxxxx"
+    }
+    ```
+
+  * Set your environment variables.
+
+    HashiCorp recommends setting these values as environment variables rather than saving them in your Terraform configuration.
+
+    In your terminal, set the following environment variables. Be sure to update the variable values with the values Azure returned in the previous command.
+
+    * For MacOS/Linux:
 
       ```bash
-      ARM_SUBSCRIPTION_ID = <YOUR_subscriptionId>
-      ARM_CLIENT_ID = <YOUR_clientId>
-      ARM_CLIENT_SECRET = <YOUR_clientSecret>
-      ARM_TENANT_ID = <YOUR_tenantId>
+      export ARM_CLIENT_ID="<SERVICE_PRINCIPAL_APPID>"
+      export ARM_CLIENT_SECRET="<SERVICE_PRINCIPAL_PASSWORD>"
+      export ARM_SUBSCRIPTION_ID="<SUBSCRIPTION_ID>"
+      export ARM_TENANT_ID="<TENANT_ID>"
       ```
 
-    * Second way:
+    * For Windows (PowerShell):
 
       ```bash
-      ARM_SUBSCRIPTION_ID = <SUBSCRIPTION_ID>
-      ARM_CLIENT_ID = <YOUR_appId>
-      ARM_CLIENT_SECRET = <YOUR_password>
-      ARM_TENANT_ID = <YOUR_tenant>
+      $env:ARM_CLIENT_ID="<SERVICE_PRINCIPAL_APPID>"
+      $env:ARM_CLIENT_SECRET="<SERVICE_PRINCIPAL_PASSWORD>"
+      $env:ARM_SUBSCRIPTION_ID="<SUBSCRIPTION_ID>"
+      $env:ARM_TENANT_ID="<TENANT_ID>"
       ```
 
 * Configure your storage account.
@@ -124,23 +135,23 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
 
 * Configure Storage Account and container names.
 
-  You must modify two input variables in `vars.tf` file:
+  The default names of storage account and container are defined as two input variables in `vars.tf` file:
 
-  * Storage Account name, which is defined as an input variable `storage_account_name`.
-  * Storage container name , which is defined as an input variable `container_name`.
+  * `storage_account_name`
+  * `container_name`
 
-  You can modify these in several ways:
+  If you want to modify both you will be able to do it in several ways, but be sure to replace the value of `<YOUR_STORAGE_ACCOUNT_NAME>` by your storage account name, and the value of `<YOUR_CONTAINER_NAME>` by your container name:
 
-  * Loading variables from command line flags.
+  * Loading variables from command line option.
 
     Run Terraform commands in this way:
 
     ```bash
-    terraform plan -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT>' -var 'container_name=<YOUR_CONTAINER_NAME>'
+    terraform plan -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT_NAME>' -var 'container_name=<YOUR_CONTAINER_NAME>'
     ```
 
     ```bash
-    terraform apply -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT>' -var 'container_name=<YOUR_CONTAINER_NAME>'
+    terraform apply -var 'storage_account_name=<YOUR_STORAGE_ACCOUNT_NAME>' -var 'container_name=<YOUR_CONTAINER_NAME>'
     ```
 
   * Loading variables from a file.
@@ -148,8 +159,8 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
     When Terraform runs it will look for a file called `terraform.tfvars`. You can populate this file with variable values that will be loaded when Terraform runs. An example for the content of the `terraform.tfvars` file:
 
     ```bash
-    storage_account_name = "<YOUR_STORAGE_ACCOUNT>"
-    container_name = "<YOUR_CONTAINER_NAME>"
+    storage_account_name="<YOUR_STORAGE_ACCOUNT_NAME>"
+    container_name="<YOUR_CONTAINER_NAME>"
     ```
 
   * Loading variables from environment variables.
@@ -157,8 +168,8 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
     Terraform will also parse any environment variables that are prefixed with `TF_VAR`. You can create environment variables `TF_VAR_storage_account_name` and `TF_VAR_container_name`:
 
     ```bash
-    TF_VAR_storage_account_name=<YOUR_STORAGE_ACCOUNT>
-    TF_VAR_container_name=<YOUR_CONTAINER_NAME>
+    export TF_VAR_storage_account_name=<YOUR_STORAGE_ACCOUNT_NAME>
+    export TF_VAR_container_name=<YOUR_CONTAINER_NAME>
     ```
 
   * Variable defaults.
@@ -168,16 +179,18 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
     ```hcl
     variable "storage_account_name" {
       description = "The name of the storage account. Must be globally unique, length between 3 and 24 characters and contain numbers and lowercase letters only."
-      default = "<YOUR_STORAGE_ACCOUNT>"
+      default     = "<YOUR_STORAGE_ACCOUNT_NAME>"
     }
 
     variable "container_name" {
       description = "The name of the Blob Storage container."
-      default = "<YOUR_CONTAINER_NAME>"
+      default     = "<YOUR_CONTAINER_NAME>"
     }
     ```
 
 * Validate the changes.
+
+  The `terraform plan` command lets you see what Terraform will do before actually making any changes.
 
   Run command:
 
@@ -185,7 +198,9 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
   terraform plan
   ```
 
-* Deploy the changes.
+* Apply the changes.
+
+  The `terraform apply` command lets you apply your configuration and it creates the infrastructure.
 
   Run command:
 
@@ -193,17 +208,19 @@ This Terraform file deploys the creation of a Blob Storage container on Microsof
   terraform apply
   ```
 
-* Test the deploy.
+* Test the changes.
 
   When the `terraform apply` command completes, use the Azure console, you should see:
   
-  * The new storage account.
+  * The new Azure storage account.
 
   * The new Blob Storage container created in the Azure storage account.
 
 * Clean up the resources created.
 
-  When you have finished, run command:
+  When you have finished, the `terraform destroy` command destroys the infrastructure you created.
+  
+  Run command:
 
   ```bash
   terraform destroy
