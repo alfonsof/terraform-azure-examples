@@ -2,7 +2,7 @@
 
 This folder contains a one server example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys a cluster of web servers on Microsoft Azure using Azure Virtual Machine Scale Set, as well as a load balancer using Azure Load Balancer.
+This Terraform file create a cluster of web servers on Microsoft Azure by provisioning the necessary infrastructure, and using an Azure Virtual Machine Scale Set, as well as a load balancer using Azure Load Balancer.
 
 The cluster of web servers returns "Hello, World" for the URL `/`. The load balancer listens on port 80.
 

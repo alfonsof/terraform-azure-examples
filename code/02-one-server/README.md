@@ -2,7 +2,7 @@
 
 This folder contains a one server example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys a single server on Microsoft Azure using Azure Virtual Machines.
+This Terraform file create a single server on Microsoft Azure by provisioning the necessary infrastructure, and using an Azure Virtual Machine.
 
 ## Requirements
 

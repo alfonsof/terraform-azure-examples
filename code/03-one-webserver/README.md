@@ -2,7 +2,7 @@
 
 This folder contains a one server example of a [Terraform](https://www.terraform.io/) file on Microsoft Azure.
 
-This Terraform file deploys a single web server on Microsoft Azure. The web server returns "Hello, World" for the URL `/` listening on port 8080.
+This Terraform file create a single web server on Microsoft Azure by provisioning the necessary infrastructure, and using an Azure Virtual Machine. The web server returns "Hello, World" for the URL `/` listening on port 8080.
 
 ## Requirements
 
